@@ -6,9 +6,10 @@ import 'package:news_app_udemy/shared/components/const.dart';
 import 'package:news_app_udemy/shared/network/local/chash.dart';
 import 'package:news_app_udemy/shared/network/obServerCubit.dart';
 import 'package:news_app_udemy/shared/network/remote/dio_helper.dart';
-import 'layout/news_app/cubit/cubit.dart';
-import 'layout/news_app/cubit/states.dart';
-import 'layout/news_app/news.dart';
+
+import 'layout/cubit/cubit.dart';
+import 'layout/cubit/states.dart';
+import 'layout/news.dart';
 
 void main() async
 {
@@ -41,11 +42,10 @@ String? choose;
           BlocProvider(create: (BuildContext context)=> NewsCubit()
             ..changeAppMode(fromShared: isDark)
           ..getBusinessData(country: (choose != null) ? choose :  'eg')
-              ..getSportsData(country: (choose != null) ? choose :  'eg')
+               ..getSportsData(country: (choose != null) ? choose :  'eg')
               ..getScienceData(country : (choose != null) ? choose :  'eg')
 
           )
-          // BlocProvider(create: (BuildContext context)=> HomeShopCubit()..getHomeShopData()..getCategoryData()),
     ],
         child: BlocConsumer<NewsCubit, NewsState>(
           listener: (context, state) {},

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:news_app_udemy/layout/news_app/cubit/states.dart';
+import 'package:news_app_udemy/layout/cubit/states.dart';
 import 'package:news_app_udemy/modules/news_app/business/business.dart';
 import 'package:news_app_udemy/modules/news_app/science/science.dart';
 import 'package:news_app_udemy/modules/news_app/sittings/sitting.dart';
@@ -26,24 +26,23 @@ class NewsCubit extends Cubit<NewsState>{
     'Science',
     'Sitting'
   ];
-  String con = CashHelper.getData(key: 'country');
+  //
 
-  void change(index){
+  void change(index, con){
     currentIndex = index;
-    if(index == 1) getSportsData(country: con ,bag: true );
-    else if(index == 2) getScienceData(country: con , bag: true);
-
     emit(NewsChangeBottomNav());
+    if(index == 1) getSportsData(country: con ,bag: true );
+    if(index == 2) getScienceData(country: con , bag: true);
   }
 
 
   List<dynamic> business = [];
   int currentPageBusiness = 1;
   var totalCurrentPageBusiness = 4;
-   void getBusinessData({country , bool bag = false}){
-     if(bag == true){
-       currentPageBusiness = 1;
-     }
+  void getBusinessData({country , bool bag = false}){
+    if(bag == true){
+      currentPageBusiness = 1;
+    }
     emit(getBusinessApiDataLoading());
     DioHelper.getData(
       url:'v2/top-headlines',
@@ -54,8 +53,8 @@ class NewsCubit extends Cubit<NewsState>{
         'apiKey':'b6e0b66d503c4ea8937592261a05f6f9',
       },).then((value){
       emit(getBusinessApiDataSuccess());
-        business = value.data['articles'];
-        currentPageBusiness++;
+      business = value.data['articles'];
+      currentPageBusiness++;
     }).catchError((e){
       print(e.toString());
       emit(getBusinessApiDataError('e'));
@@ -85,7 +84,7 @@ class NewsCubit extends Cubit<NewsState>{
   var totalCurrentPageSport = 4;
   void getSportsData({country , bool bag = false}){
     if(bag == true){
-      currentPageBusiness = 1;
+      currentPageSport = 1;
     }
     emit(getSportsApiDataLoading());
     DioHelper.getData(url:'v2/top-headlines',
@@ -97,7 +96,7 @@ class NewsCubit extends Cubit<NewsState>{
       },).then((value){
       sports = value.data['articles'];
       emit(getSportsApiDataSuccess());
-      currentPageBusiness++;
+      currentPageSport++;
     }).catchError((e){
       print(e.toString());
       emit(getSportsApiDataError('e'));
@@ -108,31 +107,32 @@ class NewsCubit extends Cubit<NewsState>{
     emit(getSportsApiDataMoreLoading());
     DioHelper.getData(url:'v2/top-headlines',
       query: {
-        'page' : currentPageSport,
+      'page' : currentPageSport,
         'country':country,
         'category':'sports',
         'apiKey':'b6e0b66d503c4ea8937592261a05f6f9',
       },).then((value){
       sports.addAll(value.data['articles']);
       emit(getSportsApiDataMoreSuccess());
-      currentPageBusiness++;
+      currentPageSport++;
     }).catchError((e){
       print(e.toString());
       emit(getSportsApiDataMoreError('e'));
     });
   }
-  
+
   List<dynamic> science = [];
   int currentPageScience = 1;
   var totalCurrentPageScience = 4;
   void getScienceData({country , bool bag = false}){
     if(bag == true){
-      currentPageBusiness = 1;
+      currentPageScience = 1;
     }
     emit(getScienceApiDataLoading());
     DioHelper.getData(url:'v2/top-headlines',
       query: {
-      'page' : currentPageScience,
+      'limit' : 120,
+        'page' : currentPageScience,
         'country': country,
         'category':'science',
         'apiKey':'b6e0b66d503c4ea8937592261a05f6f9',
@@ -164,7 +164,7 @@ class NewsCubit extends Cubit<NewsState>{
   }
 
   List<dynamic> search = [];
-var searchController = TextEditingController();
+  var searchController = TextEditingController();
   void getSearchData(String value){
     emit(getSearchApiDataLoading());
     DioHelper.getData(
