@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:news_app_udemy/layout/news_app/cubit/cubit.dart';
-import 'package:news_app_udemy/layout/news_app/cubit/states.dart';
+import 'package:news_app_udemy/layout/cubit/cubit.dart';
+import 'package:news_app_udemy/layout/cubit/states.dart';
 import 'package:news_app_udemy/shared/components/components.dart';
 
 class SearchScreen extends StatelessWidget {
